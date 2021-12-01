@@ -3,12 +3,19 @@ package ru.job4j.dreamjob.servlet;
 import ru.job4j.dreamjob.model.Post;
 import ru.job4j.dreamjob.store.Store;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class PostServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        req.setAttribute("posts", Store.instanceOf().findAllPosts());
+        req.getRequestDispatcher("posts.jsp").forward(req, res);
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
@@ -19,6 +26,6 @@ public class PostServlet extends HttpServlet {
                         req.getParameter("name")
                 )
         );
-        res.sendRedirect(req.getContextPath() + "/posts.jsp");
+        res.sendRedirect(req.getContextPath() + "/posts.do");
     }
 }

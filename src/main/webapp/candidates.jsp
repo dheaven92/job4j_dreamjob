@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="ru.job4j.dreamjob.store.Store" %>
 <%@ page import="ru.job4j.dreamjob.model.Candidate" %>
+<%@ page import="java.util.Collection" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -39,7 +39,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <% for (Candidate candidate : Store.instanceOf().findAllCandidates()) { %>
+                    <% for (Candidate candidate : (Collection<Candidate>) request.getAttribute("candidates")) { %>
                     <tr>
                         <td>
                             <a href="<%=request.getContextPath()%>/candidate/edit.jsp?id=<%=candidate.getId()%>">
