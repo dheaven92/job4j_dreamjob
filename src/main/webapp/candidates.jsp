@@ -23,8 +23,26 @@
     <title>Работа мечты</title>
 </head>
 <body>
-<div class="container pt-3">
-
+<div class="container">
+    <div class="row">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href="<%=request.getContextPath()%>">Работа мечты</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<%=request.getContextPath()%>/posts.do">Вакансии</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<%=request.getContextPath()%>/candidates.do">Кандидаты</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<%=request.getContextPath()%>/post/edit.jsp">Добавить вакансию</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<%=request.getContextPath()%>/candidate/edit.jsp">Добавить кандидата</a>
+            </li>
+        </ul>
+    </div>
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
@@ -34,7 +52,9 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th scope="col">Названия</th>
+                        <th scope="col">Имя</th>
+                        <th scope="col">Фото</th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -45,6 +65,13 @@
                                     <i class="fa fa-edit mr-3"></i>
                                 </a>
                                 <c:out value="${candidate.name}"/>
+                            </td>
+                            <td>
+                                <img src="<c:url value='/download?id=${candidate.id}'/>" width="100px" height="100px"/>
+                            </td>
+                            <td>
+                                <a class="btn btn-primary btn-sm" href="<c:url value='/photo_upload.jsp?id=${candidate.id}' />">Добавить фото</a>
+                                <a class="btn btn-danger btn-sm" href="<c:url value='/candidate/delete?id=${candidate.id}'/>">Удалить фото</a>
                             </td>
                         </tr>
                     </c:forEach>

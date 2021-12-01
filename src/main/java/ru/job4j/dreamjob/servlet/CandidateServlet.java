@@ -1,5 +1,6 @@
 package ru.job4j.dreamjob.servlet;
 
+import ru.job4j.dreamjob.consts.Consts;
 import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.store.Store;
 
@@ -7,14 +8,31 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 
 public class CandidateServlet extends HttpServlet {
 
+    private final static String CANDIDATES_PATH = "/candidates.do";
+    private final static String CANDIDATE_DELETE_PATH = "/candidate/delete";
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        req.setAttribute("candidates", Store.instanceOf().findAllCandidates());
-        req.getRequestDispatcher("candidates.jsp").forward(req, res);
+        if (CANDIDATES_PATH.equals(req.getServletPath())) {
+            req.setAttribute("candidates", Store.instanceOf().findAllCandidates());
+            req.getRequestDispatcher("candidates.jsp").forward(req, res);
+        }
+        if (CANDIDATE_DELETE_PATH.equals(req.getServletPath())) {
+            String id = req.getParameter("id");
+            Store.instanceOf().deleteCandidate(Integer.parseInt(id));
+            for (File file : new File(Consts.IMAGE_FOLDER).listFiles()) {
+                if (file.getName().contains(id)) {
+                    file.delete();
+                    break;
+                }
+            }
+            res.sendRedirect(req.getContextPath() + CANDIDATES_PATH);
+        }
     }
 
     @Override
@@ -26,6 +44,6 @@ public class CandidateServlet extends HttpServlet {
                         req.getParameter("name")
                 )
         );
-        res.sendRedirect(req.getContextPath() + "/candidates.do");
+        res.sendRedirect(req.getContextPath() + CANDIDATES_PATH);
     }
 }

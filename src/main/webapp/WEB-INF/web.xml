@@ -31,5 +31,27 @@
     <servlet-name>CandidateServlet</servlet-name>
     <url-pattern>/candidates.do</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CandidateServlet</servlet-name>
+    <url-pattern>/candidate/delete</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>DownloadServlet</servlet-name>
+    <servlet-class>ru.job4j.dreamjob.servlet.DownloadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DownloadServlet</servlet-name>
+    <url-pattern>/download</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>UploadServlet</servlet-name>
+    <servlet-class>ru.job4j.dreamjob.servlet.UploadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UploadServlet</servlet-name>
+    <url-pattern>/upload</url-pattern>
+  </servlet-mapping>
 
 </web-app>

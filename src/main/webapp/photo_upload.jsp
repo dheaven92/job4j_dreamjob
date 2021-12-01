@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Required meta tags -->
@@ -16,47 +16,37 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-    <title>Работа мечты</title>
+    <title>Загрузить фото</title>
 </head>
 <body>
+
 <div class="container">
     <div class="row">
         <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link" href="<%=request.getContextPath()%>">Работа мечты</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<%=request.getContextPath()%>/posts.do">Вакансии</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<%=request.getContextPath()%>/candidates.do">Кандидаты</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<%=request.getContextPath()%>/post/edit.jsp">Добавить вакансию</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<%=request.getContextPath()%>/candidate/edit.jsp">Добавить кандидата</a>
+                <a class="nav-link" href="<%=request.getContextPath()%>/candidates.do">Назад</a>
             </li>
         </ul>
     </div>
-    <div class="row">
-        <div class="card" style="width: 100%">
-            <div class="card-header">
-                Сегодняшние вакансии
-            </div>
-            <div class="card-body">
-            </div>
+    <div class="card">
+        <div class="card-header">
+            Загрузить фото
         </div>
-    </div>
-    <div class="row pt-3">
-        <div class="card" style="width: 100%">
-            <div class="card-header">
-                Сегодняшние кандидаты
-            </div>
-            <div class="card-body">
-            </div>
+        <div class="card-body">
+            <form
+                    action="<%=request.getContextPath()%>/upload?id=<%=request.getParameter("id")%>"
+                    method="post"
+                    enctype="multipart/form-data"
+            >
+                <div class="checkbox">
+                    <input type="file" name="file">
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary">Загрузить</button>
+            </form>
         </div>
     </div>
 </div>
+
 </body>
 </html>
