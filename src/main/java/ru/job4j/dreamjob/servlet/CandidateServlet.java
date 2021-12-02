@@ -2,7 +2,7 @@ package ru.job4j.dreamjob.servlet;
 
 import ru.job4j.dreamjob.config.PropertiesConfig;
 import ru.job4j.dreamjob.model.Candidate;
-import ru.job4j.dreamjob.store.Store;
+import ru.job4j.dreamjob.store.MemStore;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,12 +19,12 @@ public class CandidateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         if (CANDIDATES_PATH.equals(req.getServletPath())) {
-            req.setAttribute("candidates", Store.instanceOf().findAllCandidates());
+            req.setAttribute("candidates", MemStore.instanceOf().findAllCandidates());
             req.getRequestDispatcher("candidates.jsp").forward(req, res);
         }
         if (CANDIDATE_DELETE_PATH.equals(req.getServletPath())) {
             String id = req.getParameter("id");
-            Store.instanceOf().deleteCandidate(Integer.parseInt(id));
+            MemStore.instanceOf().deleteCandidate(Integer.parseInt(id));
             String imagesFolder = PropertiesConfig.getConfig().getProperty("path.images");
             for (File file : new File(imagesFolder).listFiles()) {
                 if (file.getName().contains(id)) {
@@ -39,7 +39,7 @@ public class CandidateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
         req.setCharacterEncoding("UTF-8");
-        Store.instanceOf().saveCandidate(
+        MemStore.instanceOf().saveCandidate(
                 new Candidate(
                         Integer.parseInt(req.getParameter("id")),
                         req.getParameter("name")
