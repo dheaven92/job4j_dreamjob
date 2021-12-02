@@ -1,6 +1,6 @@
 package ru.job4j.dreamjob.servlet;
 
-import ru.job4j.dreamjob.consts.Consts;
+import ru.job4j.dreamjob.config.PropertiesConfig;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,7 +16,8 @@ public class DownloadServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String name = req.getParameter("id");
         File downloadFile = null;
-        for (File file : new File(Consts.IMAGE_FOLDER).listFiles()) {
+        String imagesFolder = PropertiesConfig.getConfig().getProperty("path.images");
+        for (File file : new File(imagesFolder).listFiles()) {
             if (file.getName().contains(name)) {
                 downloadFile = file;
                 break;

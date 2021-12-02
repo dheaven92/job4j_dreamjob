@@ -4,7 +4,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import ru.job4j.dreamjob.consts.Consts;
+import ru.job4j.dreamjob.config.PropertiesConfig;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -28,7 +28,8 @@ public class UploadServlet extends HttpServlet {
         ServletFileUpload upload = new ServletFileUpload(factory);
         try {
             List<FileItem> items = upload.parseRequest(req);
-            File folder = new File(Consts.IMAGE_FOLDER);
+            String imagesFolder = PropertiesConfig.getConfig().getProperty("path.images");
+            File folder = new File(imagesFolder);
             if (!folder.exists()) {
                 folder.mkdir();
             }

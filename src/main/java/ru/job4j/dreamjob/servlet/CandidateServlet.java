@@ -1,6 +1,6 @@
 package ru.job4j.dreamjob.servlet;
 
-import ru.job4j.dreamjob.consts.Consts;
+import ru.job4j.dreamjob.config.PropertiesConfig;
 import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.store.Store;
 
@@ -25,7 +25,8 @@ public class CandidateServlet extends HttpServlet {
         if (CANDIDATE_DELETE_PATH.equals(req.getServletPath())) {
             String id = req.getParameter("id");
             Store.instanceOf().deleteCandidate(Integer.parseInt(id));
-            for (File file : new File(Consts.IMAGE_FOLDER).listFiles()) {
+            String imagesFolder = PropertiesConfig.getConfig().getProperty("path.images");
+            for (File file : new File(imagesFolder).listFiles()) {
                 if (file.getName().contains(id)) {
                     file.delete();
                     break;
