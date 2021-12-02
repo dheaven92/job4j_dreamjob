@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="ru.job4j.dreamjob.store.MemStore" %>
+<%@ page import="ru.job4j.dreamjob.store.DbStore" %>
 <%@ page import="ru.job4j.dreamjob.model.Post" %>
 <!doctype html>
 <html lang="en">
@@ -25,7 +25,7 @@
     String id = request.getParameter("id");
     Post post = new Post(0, "");
     if (id != null) {
-        post = MemStore.instanceOf().findPostById(Integer.parseInt(id));
+        post = DbStore.instanceOf().findPostById(Integer.parseInt(id));
     }
 %>
 <div class="container">
