@@ -332,7 +332,7 @@ public class DbStore implements Store {
                 it.getInt("id"),
                 it.getString("name"),
                 it.getString("email"),
-                ""
+                it.getString("password")
         );
     }
 }
