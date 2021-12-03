@@ -2,6 +2,7 @@ package ru.job4j.dreamjob.store;
 
 import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.model.Post;
+import ru.job4j.dreamjob.model.User;
 
 import java.util.Collection;
 import java.util.Map;
@@ -13,8 +14,10 @@ public class MemStore implements Store {
     private static final MemStore MEM_STORE = new MemStore();
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
     private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
+    private final Map<Integer, User> users = new ConcurrentHashMap<>();
     private static final AtomicInteger POST_ID = new AtomicInteger(4);
     private static final AtomicInteger CANDIDATE_ID = new AtomicInteger(4);
+    private static final AtomicInteger USER_ID = new AtomicInteger(4);
 
     private MemStore() {
         posts.put(1, new Post(1, "Junior Java Job"));
@@ -23,6 +26,9 @@ public class MemStore implements Store {
         candidates.put(1, new Candidate(1, "Junior Java"));
         candidates.put(2, new Candidate(2, "Middle Java"));
         candidates.put(3, new Candidate(3, "Senior Java"));
+        users.put(1, new User(1, "Bob", "bob@mail.com", ""));
+        users.put(2, new User(2, "Jim", "jim@mail.com", ""));
+        users.put(3, new User(3, "Alex", "alex@mail.com", ""));
     }
 
     public static MemStore instanceOf() {
@@ -68,5 +74,36 @@ public class MemStore implements Store {
     @Override
     public void deleteCandidate(int id) {
         candidates.remove(id);
+    }
+
+    @Override
+    public Collection<User> findAllUsers() {
+        return users.values();
+    }
+
+    @Override
+    public void saveUser(User user) {
+        if (user.getId() == 0) {
+            user.setId(USER_ID.incrementAndGet());
+        }
+        users.put(user.getId(), user);
+    }
+
+    @Override
+    public User findUserById(int id) {
+        return users.get(id);
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return users.values().stream()
+                .filter(user -> email.equals(user.getEmail()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public void deleteUser(int id) {
+        users.remove(id);
     }
 }
