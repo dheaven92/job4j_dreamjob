@@ -4,6 +4,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.job4j.dreamjob.config.PropertiesConfig;
 
 import javax.servlet.ServletContext;
@@ -17,6 +19,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class UploadServlet extends HttpServlet {
+
+    private static final Logger LOG = LoggerFactory.getLogger(UploadServlet.class.getName());
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -42,7 +46,7 @@ public class UploadServlet extends HttpServlet {
                 }
             }
         } catch (FileUploadException e) {
-            e.printStackTrace();
+            LOG.error("Could not upload file", e);
         }
         res.sendRedirect(req.getContextPath() + "/candidates.do");
     }
@@ -52,7 +56,7 @@ public class UploadServlet extends HttpServlet {
             String[] parts = fileName.split("\\.");
             return parts[parts.length - 1];
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Could not extract file extension", e);
             throw new IllegalArgumentException("Invalid image file");
         }
     }

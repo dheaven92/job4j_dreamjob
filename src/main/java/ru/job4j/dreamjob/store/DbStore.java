@@ -1,6 +1,8 @@
 package ru.job4j.dreamjob.store;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.job4j.dreamjob.config.PropertiesConfig;
 import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.model.Post;
@@ -14,6 +16,7 @@ import java.util.List;
 
 public class DbStore implements Store {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DbStore.class.getName());
     private final BasicDataSource pool = new BasicDataSource();
 
     private DbStore() {
@@ -52,7 +55,7 @@ public class DbStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Error fetching data from DB", e);
         }
         return posts;
     }
@@ -78,7 +81,7 @@ public class DbStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Error fetching data from DB", e);
         }
         return null;
     }
@@ -95,7 +98,7 @@ public class DbStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Error fetching data from DB", e);
         }
         return candidates;
     }
@@ -121,7 +124,7 @@ public class DbStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Error fetching data from DB", e);
         }
         return null;
     }
@@ -134,7 +137,7 @@ public class DbStore implements Store {
             ps.setInt(1, id);
             ps.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Error deleting data in DB", e);
         }
     }
 
@@ -150,7 +153,7 @@ public class DbStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Error fetching data from DB", e);
         }
         return users;
     }
@@ -176,7 +179,7 @@ public class DbStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Error fetching data from DB", e);
         }
         return null;
     }
@@ -193,7 +196,7 @@ public class DbStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Error fetching data from DB", e);
         }
         return null;
     }
@@ -206,7 +209,7 @@ public class DbStore implements Store {
             ps.setInt(1, id);
             ps.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Error deleting data in DB", e);
         }
     }
 
@@ -223,7 +226,7 @@ public class DbStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Error creating data in DB", e);
         }
         return post;
     }
@@ -242,7 +245,7 @@ public class DbStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Error updating data in DB", e);
         }
     }
 
@@ -259,7 +262,7 @@ public class DbStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Error creating data in DB", e);
         }
         return candidate;
     }
@@ -278,7 +281,7 @@ public class DbStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Error updating data in DB", e);
         }
     }
 
@@ -297,7 +300,7 @@ public class DbStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Error creating data in DB", e);
         }
         return user;
     }
@@ -320,7 +323,7 @@ public class DbStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Error updating data in DB", e);
         }
     }
 
