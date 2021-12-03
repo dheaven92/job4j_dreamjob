@@ -14,7 +14,7 @@ import java.io.IOException;
 public class CandidateServlet extends HttpServlet {
 
     private final static String CANDIDATES_PATH = "/candidates.do";
-    private final static String CANDIDATE_DELETE_PATH = "/candidate/delete";
+    private final static String CANDIDATE_DELETE_PATH = "/candidate/delete.do";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {

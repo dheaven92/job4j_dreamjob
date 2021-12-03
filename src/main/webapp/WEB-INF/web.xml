@@ -33,7 +33,7 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>CandidateServlet</servlet-name>
-    <url-pattern>/candidate/delete</url-pattern>
+    <url-pattern>/candidate/delete.do</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -71,5 +71,14 @@
     <servlet-name>LogoutServlet</servlet-name>
     <url-pattern>/logout.do</url-pattern>
   </servlet-mapping>
+
+  <filter>
+    <filter-name>AuthFilter</filter-name>
+    <filter-class>ru.job4j.dreamjob.filter.AuthFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AuthFilter</filter-name>
+    <url-pattern>*.do</url-pattern>
+  </filter-mapping>
 
 </web-app>

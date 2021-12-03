@@ -34,7 +34,7 @@
                             </td>
                             <td>
                                 <a class="btn btn-primary btn-sm" href="<c:url value='/photo_upload.jsp?id=${candidate.id}' />">Добавить фото</a>
-                                <a class="btn btn-danger btn-sm" href="<c:url value='/candidate/delete?id=${candidate.id}'/>">Удалить фото</a>
+                                <a class="btn btn-danger btn-sm" href="<c:url value='/candidate/delete.do?id=${candidate.id}'/>">Удалить кандидата</a>
                             </td>
                         </tr>
                     </c:forEach>

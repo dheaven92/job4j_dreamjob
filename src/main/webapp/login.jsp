@@ -18,7 +18,7 @@
                     </div>
                     <div class="form-group">
                         <label>Пароль</label>
-                        <input type="text" class="form-control" type="password" name="password">
+                        <input type="password" class="form-control" name="password">
                     </div>
                     <button type="submit" class="btn btn-primary">Войти</button>
                     <c:if test="${not empty error}">
