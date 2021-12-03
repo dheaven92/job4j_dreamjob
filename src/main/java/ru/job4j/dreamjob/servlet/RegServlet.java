@@ -10,20 +10,23 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class AuthServlet extends HttpServlet {
+public class RegServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        String name = req.getParameter("name");
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-        User userInDb = DbStore.instanceOf().findUserByEmail(email);
-        if (userInDb != null) {
+        User userWithSameEmail = DbStore.instanceOf().findUserByEmail(email);
+        if (userWithSameEmail != null) {
+            req.setAttribute("error", "Email занят другим пользователем");
+            req.getRequestDispatcher("reg.jsp").forward(req, res);
+        } else {
+            DbStore.instanceOf().saveUser(new User(0, name, email, password));
+            User userInDb = DbStore.instanceOf().findUserByEmail(email);
             HttpSession session = req.getSession();
             session.setAttribute("user", userInDb);
             res.sendRedirect(req.getContextPath() + "/posts.do");
-        } else {
-            req.setAttribute("error", "Не верный email или пароль");
-            req.getRequestDispatcher("login.jsp").forward(req, res);
         }
     }
 }
