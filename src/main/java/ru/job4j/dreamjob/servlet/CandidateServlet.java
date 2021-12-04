@@ -26,10 +26,12 @@ public class CandidateServlet extends HttpServlet {
             String id = req.getParameter("id");
             DbStore.instanceOf().deleteCandidate(Integer.parseInt(id));
             String imagesFolder = PropertiesConfig.getConfig().getProperty("path.images");
-            for (File file : new File(imagesFolder).listFiles()) {
-                if (file.getName().contains(id)) {
-                    file.delete();
-                    break;
+            if (imagesFolder != null && !imagesFolder.equals("")) {
+                for (File file : new File(imagesFolder).listFiles()) {
+                    if (file.getName().contains(id)) {
+                        file.delete();
+                        break;
+                    }
                 }
             }
             res.sendRedirect(req.getContextPath() + CANDIDATES_PATH);
