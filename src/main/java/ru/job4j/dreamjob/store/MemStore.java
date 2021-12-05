@@ -1,6 +1,7 @@
 package ru.job4j.dreamjob.store;
 
 import ru.job4j.dreamjob.model.Candidate;
+import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
 import ru.job4j.dreamjob.model.User;
 
@@ -15,6 +16,7 @@ public class MemStore implements Store {
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
     private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
     private final Map<Integer, User> users = new ConcurrentHashMap<>();
+    private final Map<Integer, City> cities = new ConcurrentHashMap<>();
     private static final AtomicInteger POST_ID = new AtomicInteger(4);
     private static final AtomicInteger CANDIDATE_ID = new AtomicInteger(4);
     private static final AtomicInteger USER_ID = new AtomicInteger(4);
@@ -41,6 +43,11 @@ public class MemStore implements Store {
     }
 
     @Override
+    public Collection<Post> findRecentPosts() {
+        return findAllPosts();
+    }
+
+    @Override
     public void savePost(Post post) {
         if (post.getId() == 0) {
             post.setId(POST_ID.incrementAndGet());
@@ -56,6 +63,11 @@ public class MemStore implements Store {
     @Override
     public Collection<Candidate> findAllCandidates() {
         return candidates.values();
+    }
+
+    @Override
+    public Collection<Candidate> findRecentCandidates() {
+        return findAllCandidates();
     }
 
     @Override
@@ -105,5 +117,10 @@ public class MemStore implements Store {
     @Override
     public void deleteUser(int id) {
         users.remove(id);
+    }
+
+    @Override
+    public Collection<City> findAllCities() {
+        return cities.values();
     }
 }

@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.dreamjob.config.PropertiesConfig;
 import ru.job4j.dreamjob.model.Candidate;
+import ru.job4j.dreamjob.model.City;
 import ru.job4j.dreamjob.model.Post;
 import ru.job4j.dreamjob.model.User;
 
@@ -45,19 +46,13 @@ public class DbStore implements Store {
 
     @Override
     public Collection<Post> findAllPosts() {
-        List<Post> posts = new ArrayList<>();
-        try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM post")
-        ) {
-            try (ResultSet it = ps.executeQuery()) {
-                while (it.next()) {
-                    posts.add(new Post(it.getInt("id"), it.getString("name")));
-                }
-            }
-        } catch (Exception e) {
-            LOG.error("Error fetching data from DB", e);
-        }
-        return posts;
+        return findPostsByQuery("SELECT * FROM post");
+    }
+
+    @Override
+    public Collection<Post> findRecentPosts() {
+        return findPostsByQuery("SELECT * FROM post WHERE created BETWEEN (SELECT now() AT TIME ZONE 'Europe/Moscow') "
+                + "- INTERVAL '24 hours' AND (SELECT now() AT TIME ZONE 'Europe/Moscow')");
     }
 
     @Override
@@ -88,19 +83,14 @@ public class DbStore implements Store {
 
     @Override
     public Collection<Candidate> findAllCandidates() {
-        List<Candidate> candidates = new ArrayList<>();
-        try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate")
-        ) {
-            try (ResultSet it = ps.executeQuery()) {
-                while (it.next()) {
-                    candidates.add(new Candidate(it.getInt("id"), it.getString("name")));
-                }
-            }
-        } catch (Exception e) {
-            LOG.error("Error fetching data from DB", e);
-        }
-        return candidates;
+        return findCandidatesByQuery("SELECT * FROM candidate");
+    }
+
+    @Override
+    public Collection<Candidate> findRecentCandidates() {
+        return findCandidatesByQuery("SELECT * FROM candidate "
+                + "WHERE created BETWEEN (SELECT now() AT TIME ZONE 'Europe/Moscow') "
+                + "- INTERVAL '24 hours' AND (SELECT now() AT TIME ZONE 'Europe/Moscow')");
     }
 
     @Override
@@ -120,7 +110,11 @@ public class DbStore implements Store {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
                 if (it.next()) {
-                    return new Candidate(it.getInt("id"), it.getString("name"));
+                    return new Candidate(
+                            it.getInt("id"),
+                            it.getString("name"),
+                            it.getInt("city_id")
+                    );
                 }
             }
         } catch (Exception e) {
@@ -213,6 +207,39 @@ public class DbStore implements Store {
         }
     }
 
+    @Override
+    public Collection<City> findAllCities() {
+        List<City> cities = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM city")
+        ) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    cities.add(new City(it.getInt("id"), it.getString("name")));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Error fetching data from DB", e);
+        }
+        return cities;
+    }
+
+    private Collection<Post> findPostsByQuery(String query) {
+        List<Post> posts = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement(query)
+        ) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    posts.add(new Post(it.getInt("id"), it.getString("name")));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Error fetching data from DB", e);
+        }
+        return posts;
+    }
+
     private Post create(Post post) {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement("INSERT INTO post(name) VALUES (?)",
@@ -249,12 +276,29 @@ public class DbStore implements Store {
         }
     }
 
+    private Collection<Candidate> findCandidatesByQuery(String query) {
+        List<Candidate> candidates = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(query)
+        ) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    candidates.add(new Candidate(it.getInt("id"), it.getString("name")));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Error fetching data from DB", e);
+        }
+        return candidates;
+    }
+
     private Candidate create(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO candidate(name) VALUES (?)",
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO candidate(name, city_id) VALUES (?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
+            ps.setInt(2, candidate.getCityId());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -269,11 +313,14 @@ public class DbStore implements Store {
 
     private void update(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("UPDATE candidate SET name = ?, modified = ? where id = ?")
+             PreparedStatement ps = cn.prepareStatement(
+                     "UPDATE candidate SET name = ?, city_id = ?, modified = ? where id = ?"
+             )
         ) {
             ps.setString(1, candidate.getName());
-            ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
-            ps.setInt(3, candidate.getId());
+            ps.setInt(2, candidate.getCityId());
+            ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setInt(4, candidate.getId());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {

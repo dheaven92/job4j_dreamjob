@@ -14,11 +14,11 @@
                 <form action="<%=request.getContextPath()%>/auth.do" method="post">
                     <div class="form-group">
                         <label>Почта</label>
-                        <input type="text" class="form-control" name="email">
+                        <input type="text" class="form-control" name="email" required>
                     </div>
                     <div class="form-group">
                         <label>Пароль</label>
-                        <input type="password" class="form-control" name="password">
+                        <input type="password" class="form-control" name="password" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Войти</button>
                     <a class="btn btn-secondary" href="<%=request.getContextPath()%>/reg.jsp">Регистрация</a>

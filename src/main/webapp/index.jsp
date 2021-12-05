@@ -12,6 +12,17 @@
                 Сегодняшние вакансии
             </div>
             <div class="card-body">
+                <table class="table">
+                    <tbody>
+                    <c:forEach items="${posts}" var="post">
+                        <tr>
+                            <td>
+                                <c:out value="${post.name}"/>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -21,6 +32,17 @@
                 Сегодняшние кандидаты
             </div>
             <div class="card-body">
+                <table class="table">
+                    <tbody>
+                    <c:forEach items="${candidates}" var="candidate">
+                        <tr>
+                            <td>
+                                <c:out value="${candidate.name}"/>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

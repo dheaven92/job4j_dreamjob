@@ -1,5 +1,7 @@
 package ru.job4j.dreamjob.servlet;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import ru.job4j.dreamjob.config.PropertiesConfig;
 import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.store.DbStore;
@@ -10,11 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 public class CandidateServlet extends HttpServlet {
 
     private final static String CANDIDATES_PATH = "/candidates.do";
     private final static String CANDIDATE_DELETE_PATH = "/candidate/delete.do";
+    private static final Gson GSON = new GsonBuilder().create();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -40,13 +45,13 @@ public class CandidateServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
-        req.setCharacterEncoding("UTF-8");
-        DbStore.instanceOf().saveCandidate(
-                new Candidate(
-                        Integer.parseInt(req.getParameter("id")),
-                        req.getParameter("name")
-                )
-        );
-        res.sendRedirect(req.getContextPath() + CANDIDATES_PATH);
+        Candidate candidate = GSON.fromJson(req.getReader(), Candidate.class);
+        DbStore.instanceOf().saveCandidate(candidate);
+        res.setContentType("application/json; charset=utf-8");
+        OutputStream output = res.getOutputStream();
+        String json = GSON.toJson(candidate);
+        output.write(json.getBytes(StandardCharsets.UTF_8));
+        output.flush();
+        output.close();
     }
 }
