@@ -1,13 +1,18 @@
 package ru.job4j.dreamjob.servlet;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.junit.Test;
 import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.store.DbStore;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -20,8 +25,10 @@ public class CandidateServletTest {
     public void whenCreateCandidate() throws IOException {
         HttpServletRequest req = mock(HttpServletRequest.class);
         HttpServletResponse res = mock(HttpServletResponse.class);
-        when(req.getParameter("id")).thenReturn("0");
-        when(req.getParameter("name")).thenReturn("New Candidate");
+        Gson gson = new GsonBuilder().create();
+        String json = gson.toJson(new Candidate(0, "New Candidate", 1));
+        when(req.getReader()).thenReturn(new BufferedReader(new StringReader(json)));
+        when(res.getOutputStream()).thenReturn(mock(ServletOutputStream.class));
         new CandidateServlet().doPost(req, res);
         Candidate candidate = DbStore.instanceOf().findCandidateById(1);
         assertThat(candidate, notNullValue());
@@ -31,9 +38,11 @@ public class CandidateServletTest {
     public void whenEditCandidate() throws IOException {
         HttpServletRequest req = mock(HttpServletRequest.class);
         HttpServletResponse res = mock(HttpServletResponse.class);
-        DbStore.instanceOf().saveCandidate(new Candidate(0, "New candidate"));
-        when(req.getParameter("id")).thenReturn("1");
-        when(req.getParameter("name")).thenReturn("Updated candidate");
+        DbStore.instanceOf().saveCandidate(new Candidate(0, "New candidate", 1));
+        Gson gson = new GsonBuilder().create();
+        String json = gson.toJson(new Candidate(1, "Updated candidate", 1));
+        when(req.getReader()).thenReturn(new BufferedReader(new StringReader(json)));
+        when(res.getOutputStream()).thenReturn(mock(ServletOutputStream.class));
         new CandidateServlet().doPost(req, res);
         Candidate candidate = DbStore.instanceOf().findCandidateById(1);
         assertThat(candidate.getName(), is("Updated candidate"));
