@@ -26,7 +26,7 @@ public class CandidateServlet extends HttpServlet {
             String id = req.getParameter("id");
             DbStore.instanceOf().deleteCandidate(Integer.parseInt(id));
             String imagesFolder = PropertiesConfig.getConfig().getProperty("path.images");
-            if (imagesFolder != null && !imagesFolder.equals("")) {
+            if (!"".equals(imagesFolder)) {
                 for (File file : new File(imagesFolder).listFiles()) {
                     if (file.getName().contains(id)) {
                         file.delete();
