@@ -19,10 +19,24 @@
             const lastName = $("#lastName").val();
             const gender = $("input:radio[name ='gender']:checked").val();
             const description = $("#description").val();
+
             if (firstName === "") alert("Заполните " + $("#firstName").attr("title"));
             if (lastName === "") alert("Заполните " + $("#lastName").attr("title"));
             if (gender === undefined) alert("Заполните " + $("input:radio[name ='gender']").attr("title"));
             if (description === "") alert("Заполните " + $("#description").attr("title"));
+        }
+
+        function addRow() {
+            const firstName = $("#firstName").val();
+            const lastName = $("#lastName").val();
+            const gender = $("input:radio[name ='gender']:checked").val();
+            const id = +$('#table tr:last th').html() + 1;
+            $('#table tr:last').after(
+                '<tr><th>' + id + '</th>'
+                + '<td>' + firstName +'</td>'
+                + '<td>' + lastName +'</td>'
+                + '<td>' + gender +'</td></tr>'
+            );
         }
     </script>
 </head>
@@ -69,9 +83,12 @@
         <button type="submit" class="btn btn-primary" onclick="return validate();">Подтвердить</button>
     </form>
 
-    <br>
+    <hr>
 
-    <table class="table">
+    <button type="button" class="btn btn-secondary" onclick="addRow()">Добавить строку в таблицу</button>
+    <br>
+    <br>
+    <table class="table" id="table">
         <thead>
         <tr>
             <th scope="col">#</th>
