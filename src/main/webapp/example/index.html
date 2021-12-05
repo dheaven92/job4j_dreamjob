@@ -20,23 +20,39 @@
             const gender = $("input:radio[name ='gender']:checked").val();
             const description = $("#description").val();
 
-            if (firstName === "") alert("Заполните " + $("#firstName").attr("title"));
-            if (lastName === "") alert("Заполните " + $("#lastName").attr("title"));
-            if (gender === undefined) alert("Заполните " + $("input:radio[name ='gender']").attr("title"));
-            if (description === "") alert("Заполните " + $("#description").attr("title"));
+            let isValid = true;
+            if (firstName === "") {
+                alert("Заполните " + $("#firstName").attr("title"));
+                isValid = false;
+            }
+            if (lastName === "") {
+                alert("Заполните " + $("#lastName").attr("title"));
+                isValid = false;
+            }
+            if (gender === undefined) {
+                alert("Заполните " + $("input:radio[name ='gender']").attr("title"));
+                isValid = false;
+            }
+            if (description === "") {
+                alert("Заполните " + $("#description").attr("title"));
+                isValid = false;
+            }
+            return isValid;
         }
 
         function addRow() {
-            const firstName = $("#firstName").val();
-            const lastName = $("#lastName").val();
-            const gender = $("input:radio[name ='gender']:checked").val();
-            const id = +$('#table tr:last th').html() + 1;
-            $('#table tr:last').after(
-                '<tr><th>' + id + '</th>'
-                + '<td>' + firstName +'</td>'
-                + '<td>' + lastName +'</td>'
-                + '<td>' + gender +'</td></tr>'
-            );
+            if (validate()) {
+                const firstName = $("#firstName").val();
+                const lastName = $("#lastName").val();
+                const gender = $("input:radio[name ='gender']:checked").val();
+                const id = +$('#table tr:last th').html() + 1;
+                $('#table tr:last').after(
+                    '<tr><th>' + id + '</th>'
+                    + '<td>' + firstName +'</td>'
+                    + '<td>' + lastName +'</td>'
+                    + '<td>' + gender +'</td></tr>'
+                );
+            }
         }
     </script>
 </head>
