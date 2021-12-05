@@ -13,6 +13,18 @@
             integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script>
+        function validate() {
+            const firstName = $("#firstName").val();
+            const lastName = $("#lastName").val();
+            const gender = $("input:radio[name ='gender']:checked").val();
+            const description = $("#description").val();
+            if (firstName === "") alert("Заполните " + $("#firstName").attr("title"));
+            if (lastName === "") alert("Заполните " + $("#lastName").attr("title"));
+            if (gender === undefined) alert("Заполните " + $("input:radio[name ='gender']").attr("title"));
+            if (description === "") alert("Заполните " + $("#description").attr("title"));
+        }
+    </script>
 </head>
 <body>
 
@@ -23,13 +35,13 @@
         <div class="form-group">
             <label>
                 Имя:
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" id="firstName" title="Имя">
             </label>
         </div>
         <div class="form-group">
             <label>
                 Фамилия:
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" id="lastName" title="Фамилия">
             </label>
         </div>
         <div class="form-group">
@@ -37,13 +49,13 @@
             <br>
             <div class="form-check-inline">
                 <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="gender">
+                    <input type="radio" class="form-check-input" value="Женский" name="gender" title="Пол">
                     Женский
                 </label>
             </div>
             <div class="form-check-inline">
                 <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="gender">
+                    <input type="radio" class="form-check-input" value="Мужской" name="gender" title="Пол">
                     Мужской
                 </label>
             </div>
@@ -51,10 +63,10 @@
         <div class="form-group">
             <label>
                 Описание:
-                <textarea class="form-control"></textarea>
+                <textarea class="form-control" id="description" title="Описание"></textarea>
             </label>
         </div>
-        <button type="submit" class="btn btn-primary">Подтвердить</button>
+        <button type="submit" class="btn btn-primary" onclick="return validate();">Подтвердить</button>
     </form>
 
     <br>
