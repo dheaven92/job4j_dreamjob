@@ -42,7 +42,7 @@
     $(document).ready(function () {
         $("#form").submit(function (e) {
             e.preventDefault();
-            const url = 'http://localhost:8080/dreamjob/posts.do';
+            const url = `http://${location.host}/dreamjob/posts.do`;
             const nameInput = $("#name");
             if (nameInput.val() === "") {
                 nameInput.addClass("is-invalid");

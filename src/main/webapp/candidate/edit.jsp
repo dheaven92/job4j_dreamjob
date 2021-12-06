@@ -67,7 +67,7 @@
 
         $("#form").submit(function (e) {
             e.preventDefault();
-            const url = 'http://localhost:8080/dreamjob/candidates.do';
+            const url = `http://${location.host}/dreamjob/candidates.do`;
             const nameInput = $("#name");
             const cityOption = $("#cities option:selected");
             if (nameInput.val() === "") {
